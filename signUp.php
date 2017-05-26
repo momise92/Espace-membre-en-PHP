@@ -1,13 +1,5 @@
 <?php
-// Connexion à la base de données
-try
-{
-    $bdd = new PDO('mysql:host=localhost;dbname=mon_blog', 'root', 'root');
-}
-catch(Exception $e)
-{
-        die('Erreur : '.$e->getMessage());
-}
+require 'db.php'; // tu inclus ton fichier avec la connexion à la base de donnée
 if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password-confirm']))
     {
         // Sécurité
