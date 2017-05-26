@@ -19,14 +19,14 @@ if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['passw
         {
             if($password == $passwordConfirm) // on vérifie que les deux mots de passe soient identique.
             {
-                $req = $db->query("SELECT pseudo FROM membre WHERE pseudo = '$identifiant'"); // On séléectionne le champ (identifiant) dans notre table users où identifiant est égale au champ identifiant rentré par l'utilisateur
+                $req = $db->query("SELECT pseudo FROM membre WHERE pseudo = '$identifiant'"); // On séléctionne le champ (identifiant) dans notre table membre où identifiant est égale au champ identifiant rentré par l'utilisateur
                 $count = $req->rowCount(); // on rowCount() la requete, donc rowcount retournera une valeur si il trouve.
                 if($count == 0) // si il ne trouve pas une valeur, alors c'est bon
                 {
-                    $req = $db->prepare("INSERT INTO membre(pseudo, password, email) VALUES('$identifiant', '$password', '$email')");
+                    $req = $db->prepare("INSERT INTO membre(pseudo, pass, email) VALUES('$identifiant', '$password', '$email')");
                     $req->execute(array(
                         'pseudo' => $identifiant,
-                        'password' => $password,
+                        'pass' => $password,
                         'email' => $email
                     ));
                     header('Location: login.php');
