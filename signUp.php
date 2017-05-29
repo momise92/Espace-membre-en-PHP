@@ -1,3 +1,5 @@
+<?php require 'include/header.php'; ?>
+
 <?php
 require 'db.php'; // tu inclus ton fichier avec la connexion à la base de donnée
 if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password-confirm']))
@@ -66,3 +68,5 @@ if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['passw
         S'inscrire
     </button>
 		</form>
+
+		<?php require 'include/footer.php'; ?>
