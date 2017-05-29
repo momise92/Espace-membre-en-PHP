@@ -1,7 +1,7 @@
 <?php require 'include/header.php'; ?>
 
 <?php
-require 'db.php'; // tu inclus ton fichier avec la connexion à la base de donnée
+require 'db.php'; //inclus ton fichier avec la connexion à la base de donnée
 if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password-confirm']))
     {
         // Sécurité
@@ -41,32 +41,22 @@ if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['passw
 	<?= $message; ?>
 		<form action="" method="post">
 			<div class="form-group">
-				<label for="identifiant">
-            Votre identifiant
-        </label>
+				<label for="identifiant">Votre identifiant </label>
 				<input type="text" name="identifiant" id="identifiant" class="form-control">
 			</div>
 			<div class="form-group">
-				<label for="email">
-            Votre adresse e-mail
-        </label>
+				<label for="email">Votre adresse e-mail </label>
 				<input type="text" name="email" id="email" class="form-control">
 			</div>
 			<div class="form-group">
-				<label for="password">
-            Votre mot de passe
-        </label>
+				<label for="password">Votre mot de passe </label>
 				<input type="password" name="password" id="password" class="form-control">
 			</div>
 			<div class="form-group">
-				<label for="password-confirm">
-            Confirmez votre mot de passe
-        </label>
+				<label for="password-confirm">Confirmez votre mot de passe </label>
 				<input type="password" name="password-confirm" id="password-confirm" class="form-control">
 			</div>
-			<button type="submit" class="btn btn-default btn-lg btn-block">
-        S'inscrire
-    </button>
+			<button type="submit" class="btn btn-default btn-lg btn-block">S'inscrire </button>
 		</form>
 
 		<?php require 'include/footer.php'; ?>
