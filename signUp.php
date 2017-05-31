@@ -1,4 +1,3 @@
-<?php require 'include/header.php'; ?>
 <?php
 require 'db.php';// Connexion à la base de données
 if(isset($_POST['validation']))
@@ -19,13 +18,13 @@ if(isset($_POST['validation']))
 
 					if($password == $passwordConfirm){
 
-						$req = $db->prepare("INSERT INTO membre(pseudo, pass, email) VALUES('$pseudo', '$password', '$email')");
+						$req = $db->prepare("INSERT INTO membre(pseudo, pass, email, date_inscription) VALUES('$pseudo', '$password', '$email', CURDATE())");
 							$req->execute(array(
 								'pseudo' => $pseudo,
 								'pass' => $password,
 								'email' => $email
 							));
-							header('Location: login.php');
+						header('Location: login.php');
 					}
 					else {
 						$erreur = 'Les mots de passe ne sont pas identiques.';
@@ -50,7 +49,8 @@ if(isset($_POST['validation']))
 }
 
 ?>
-
+	<!--Formulaire d'inscription-->
+	<?php require 'include/header.php'; ?>
 	<?php
 if(isset($erreur)) { //affiche les texte de la variable $erreur.
 
