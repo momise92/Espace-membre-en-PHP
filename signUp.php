@@ -1,52 +1,70 @@
 <?php require 'include/header.php'; ?>
-
 <?php
-require 'db.php'; //inclus ton fichier avec la connexion à la base de donnée
-if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password-confirm']))
-    {
-        // Sécurité
-        $identifiant = addslashes(htmlspecialchars(htmlentities(trim($_POST['identifiant']))));
-        $email = addslashes(htmlspecialchars(htmlentities(trim($_POST['email']))));
-        $password = sha1($_POST['password']);
-        $passwordConfirm = sha1($_POST['password-confirm']);
-        if(preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $email)) // on vérifie si l'email à un format valide.
-        {
-            if($password == $passwordConfirm) // on vérifie que les deux mots de passe soient identique.
-            {
-                $req = $db->query("SELECT pseudo FROM membre WHERE pseudo = '$identifiant'"); // On séléctionne le champ (identifiant) dans notre table membre où identifiant est égale au champ identifiant rentré par l'utilisateur
-                $count = $req->rowCount(); // on rowCount() la requete, donc rowcount retournera une valeur si il trouve.
-                if($count == 0) // si il ne trouve pas une valeur, alors c'est bon
-                {
-                    $req = $db->prepare("INSERT INTO membre(pseudo, pass, email) VALUES('$identifiant', '$password', '$email')");
-                    $req->execute(array(
-                        'pseudo' => $identifiant,
-                        'pass' => $password,
-                        'email' => $email
-                    ));
-                    header('Location: login.php');
-                }else{
-                    $message = 'Cette adresse e-mail est déjà utilisé.';
-                }
-            }else{
-                $message = 'Cet identifiant est déjà utilisé.';
-            }
-        }else{
-            $message = 'Vos mots de passe ne sont pas identique.';
-        }
-    }else{
-        $message = 'Votre adresse e-mail n\'est pas valide.';
-    }
+require 'db.php';// Connexion à la base de données
+if(isset($_POST['validation']))
+{
+	if(!empty($_POST['pseudo']) AND !empty($_POST['email']) AND !empty($_POST['password']) AND !empty($_POST['password-confirm']))
+	{
+		$pseudo = htmlspecialchars($_POST['pseudo']);
+		$email = htmlspecialchars($_POST['email']);
+		$password = sha1($_POST['password']);
+		$passwordConfirm = sha1($_POST['password-confirm']);
+		if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+			$req = $db->query("SELECT pseudo FROM membre WHERE pseudo = '$pseudo'"); // On sélectionne le champ (pseudo) dans notre table membre où pseudo est égale au champ pseudo rentré par l'utilisateur
+            $countpseudo = $req->rowCount(); // on rowCount() la requete, donc rowcount retournera une valeur si il trouve.
+			if($countpseudo == 0 ){ // si il ne trouve pas une valeur, alors c'est bon
+				$req = $db->query("SELECT email FROM membre WHERE email = '$email'");
+				$countemail = $req->rowCount();
+				if($countemail == 0 ){
+
+					if($password == $passwordConfirm){
+
+						$req = $db->prepare("INSERT INTO membre(pseudo, pass, email) VALUES('$pseudo', '$password', '$email')");
+							$req->execute(array(
+								'pseudo' => $pseudo,
+								'pass' => $password,
+								'email' => $email
+							));
+							header('Location: login.php');
+					}
+					else {
+						$erreur = 'Les mots de passe ne sont pas identiques.';
+					}
+				}
+					else{
+						$erreur = 'Cet adresse email est déjà utilisé.';
+					}
+			}
+			else{
+				$erreur = 'L\'identifiant ' .$pseudo. ' est déjà utilisé.';
+			}
+		}
+
+		else {
+			$erreur = "Veuillez entrer une adresse email valide.";
+		}
+	}
+	else {
+		$erreur = "Tous les champs doivent êtres remplis";
+	}
+}
+
 ?>
 
-	<?= $message; ?>
+	<?php
+if(isset($erreur)) { //affiche les texte de la variable $erreur.
+
+	echo '<div class="alert alert-danger">'.$erreur.'</div>';
+}
+?>
 		<form action="" method="post">
 			<div class="form-group">
-				<label for="identifiant">Votre identifiant </label>
-				<input type="text" name="identifiant" id="identifiant" class="form-control">
+				<label for="pseudo">Votre identifiant </label>
+				<input type="text" name="pseudo" id="pseudo" class="form-control">
 			</div>
 			<div class="form-group">
 				<label for="email">Votre adresse e-mail </label>
-				<input type="text" name="email" id="email" class="form-control">
+				<input type="email" name="email" id="email" class="form-control">
 			</div>
 			<div class="form-group">
 				<label for="password">Votre mot de passe </label>
@@ -56,7 +74,7 @@ if(isset($_POST['identifiant']) && isset($_POST['email']) && isset($_POST['passw
 				<label for="password-confirm">Confirmez votre mot de passe </label>
 				<input type="password" name="password-confirm" id="password-confirm" class="form-control">
 			</div>
-			<button type="submit" class="btn btn-default btn-lg btn-block">S'inscrire </button>
+			<button type="submit" name="validation" class="btn btn-default btn-lg btn-block">S'inscrire </button>
 		</form>
 
 		<?php require 'include/footer.php'; ?>
