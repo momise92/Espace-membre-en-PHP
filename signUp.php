@@ -24,7 +24,7 @@ if(isset($_POST['validation']))
 								'pass' => $password,
 								'email' => $email
 							));
-						header('Location: login.php');
+						$reussi = "Votre compte à bien été créé. <a href =\"login.php\">Me connecter";
 					}
 					else {
 						$erreur = 'Les mots de passe ne sont pas identiques.';
@@ -55,6 +55,11 @@ if(isset($_POST['validation']))
 if(isset($erreur)) { //affiche les texte de la variable $erreur.
 
 	echo '<div class="alert alert-danger">'.$erreur.'</div>';
+} else {
+	if(isset($reussi)) {
+			echo '<div class="alert alert-success">'.$reussi.'</div>';
+
+	}
 }
 ?>
 		<form action="" method="post">
