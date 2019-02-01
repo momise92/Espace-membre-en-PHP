@@ -1,25 +1,23 @@
 <?php
 session_start();
 require 'db.php';
-if(isset($_POST['connecter'])){
+if (isset($_POST['connecter'])) {
 	$emailconnect = htmlspecialchars($_POST['emailconnect']);
 	$passconnect = sha1($_POST['passconnect']);
-	if(!empty($emailconnect) && !empty($passconnect)){
+	if (!empty($emailconnect) && !empty($passconnect)) {
 		$req = $db->prepare("SELECT * FROM membre where email = '$emailconnect' AND pass = '$passconnect'");
 		$req->execute(array($emailconnect, $passconnect));
 		$resultat = $req->rowCount();
-		if($resultat == 1){
+		if ($resultat == 1) {
 			$userinfo = $req->fetch();
-    		$_SESSION['id'] = $userinfo['id'];
+			$_SESSION['id'] = $userinfo['id'];
 			$_SESSION['pseudo'] = $userinfo['pseudo'];
 			$_SESSION['email'] = $userinfo['email'];
-			header("location: profil.php?id=".$_SESSION['id']);
-		}
-		else{
+			header("location: profil.php?id=" . $_SESSION['id']);
+		} else {
 			$erreur = "Mauvais identifiant ou mot de passe.";
 		}
-	}
-	else {
+	} else {
 		$erreur = "Veuillez remplir tous les champs.";
 	}
 
@@ -33,9 +31,9 @@ if(isset($_POST['connecter'])){
 
 	<!--Affichage des erreurs-->
 	<?php
-if(isset($erreur)) { //affiche les texte de la variable $erreur.
+if (isset($erreur)) { //affiche les texte de la variable $erreur.
 
-	echo '<div class="alert alert-danger">'.$erreur.'</div>';
+	echo '<div class="alert alert-danger">' . $erreur . '</div>';
 }
 ?>
 		<form action="" method="post">

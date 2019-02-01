@@ -1,5 +1,5 @@
 <?php
-// Connexion à la base de donnée
+/** Connexion à la base de donnée **/
 
 try {
         $host = 'localhost';
